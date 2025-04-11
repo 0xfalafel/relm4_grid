@@ -24,7 +24,7 @@ impl MyListItem {
 struct Widgets {
     label: gtk::Label,
     label2: gtk::Label,
-    button: gtk::CheckButton,
+    button: gtk::Button,
 }
 
 impl Drop for Widgets {
@@ -47,7 +47,7 @@ impl RelmListItem for MyListItem {
                 gtk::Label,
 
                 #[name = "button"]
-                gtk::CheckButton,
+                gtk::Button,
             }
         }
 
@@ -69,7 +69,7 @@ impl RelmListItem for MyListItem {
 
         label.set_label(&format!("Value: {} ", self.value));
         label2.add_write_only_binding(&self.binding, "label");
-        button.set_active(self.value % 2 == 0);
+        button.set_label(format!("{}", self.value).as_ref());
     }
 }
 
