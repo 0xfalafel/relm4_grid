@@ -18,13 +18,12 @@ impl MyListItem {
 }
 
 struct Widgets {
-    label: gtk::Label,
     button: gtk::Button,
 }
 
 impl Drop for Widgets {
     fn drop(&mut self) {
-        dbg!(self.label.label());
+        dbg!(self.button.label().unwrap());
     }
 }
 
@@ -35,16 +34,12 @@ impl RelmListItem for MyListItem {
     fn setup(_item: &gtk::ListItem) -> (gtk::Box, Widgets) {
         relm4::view! {
             my_box = gtk::Box {
-                #[name = "label"]
-                gtk::Label,
-
                 #[name = "button"]
                 gtk::Button,
             }
         }
 
         let widgets = Widgets {
-            label,
             button,
         };
 
@@ -53,11 +48,9 @@ impl RelmListItem for MyListItem {
 
     fn bind(&mut self, widgets: &mut Self::Widgets, _root: &mut Self::Root) {
         let Widgets {
-            label,
             button,
         } = widgets;
 
-        label.set_label(&format!("Value: {} ", self.value));
         button.set_label(format!("{}", self.value).as_ref());
     }
 }
@@ -156,7 +149,7 @@ impl SimpleComponent for App {
                 //     .for_each(|row| println!("item {}", row.borrow().value));
 
                 // Count up the first item
-                // let first_item = self.list_view_wrapper.get(0).unwrap();
+                //let first_item = self.list_view_wrapper.get(0).unwrap();
             }
             Msg::Remove => {
                 // Remove the second item
