@@ -1,29 +1,24 @@
 use gtk::prelude::*;
 use relm4::{
-    binding::{Binding, U8Binding},
     prelude::*,
     typed_view::list::{RelmListItem, TypedListView},
-    RelmObjectExt,
 };
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 struct MyListItem {
     value: u8,
-    binding: U8Binding,
 }
 
 impl MyListItem {
     fn new(value: u8) -> Self {
         Self {
             value,
-            binding: U8Binding::new(0),
         }
     }
 }
 
 struct Widgets {
     label: gtk::Label,
-    label2: gtk::Label,
     button: gtk::Button,
 }
 
@@ -43,9 +38,6 @@ impl RelmListItem for MyListItem {
                 #[name = "label"]
                 gtk::Label,
 
-                #[name = "label2"]
-                gtk::Label,
-
                 #[name = "button"]
                 gtk::Button,
             }
@@ -53,7 +45,6 @@ impl RelmListItem for MyListItem {
 
         let widgets = Widgets {
             label,
-            label2,
             button,
         };
 
@@ -63,12 +54,10 @@ impl RelmListItem for MyListItem {
     fn bind(&mut self, widgets: &mut Self::Widgets, _root: &mut Self::Root) {
         let Widgets {
             label,
-            label2,
             button,
         } = widgets;
 
         label.set_label(&format!("Value: {} ", self.value));
-        label2.add_write_only_binding(&self.binding, "label");
         button.set_label(format!("{}", self.value).as_ref());
     }
 }
@@ -167,10 +156,7 @@ impl SimpleComponent for App {
                 //     .for_each(|row| println!("item {}", row.borrow().value));
 
                 // Count up the first item
-                let first_item = self.list_view_wrapper.get(0).unwrap();
-                let first_binding = &mut first_item.borrow_mut().binding;
-                let mut guard = first_binding.guard();
-                *guard += 1;
+                // let first_item = self.list_view_wrapper.get(0).unwrap();
             }
             Msg::Remove => {
                 // Remove the second item
